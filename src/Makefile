@@ -12,6 +12,13 @@ else ifeq ($(TARGET),X86) # Usage: 'make android TARGET=X86'
 	CXXFLAGS += -march=i686
 	LDFLAGS += -march=i686
 	BOOST_ARCH=x86
+else ifeq ($(TARGET),ARMV8) # Usage: 'make android TARGET=ARMV8'
+	THE_OS=Android
+	SATC=$(HOME)/development/ndk/standalone-toolchain/arm64-api27
+	CXX=aarch64-linux-android-clang++
+	CXXFLAGS += -march=armv8
+	LDFLAGS += -march=armv8
+	BOOST_ARCH=arm64-v8a
 else
 	THE_OS := $(shell uname -s)
 endif
@@ -51,8 +58,8 @@ LIBS =
 	
 ifeq ($(THE_OS),Android)
 	# Extra flags
-	CXXFLAGS += -std=c++14 -fPIE -D__ANDROID_API__=13 -Wno-macro-redefined -DUSE_CPU_ONLY
-	LDFLAGS += -fPIE -pie -D__ANDROID_API__=13
+	CXXFLAGS += -std=c++14 -fPIE -D__ANDROID_API__=21 -Wno-macro-redefined -DUSE_CPU_ONLY
+	LDFLAGS += -fPIE -pie -D__ANDROID_API__=21
 	# search local path for shared libraries?
 	#LDFLAGS += -Wl,-rpath,.
 	
