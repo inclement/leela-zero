@@ -1,24 +1,10 @@
 ifeq ($(TARGET),ARMV7)    # Usage: 'make android TARGET=ARMV7'
 	THE_OS=Android
-	SATC=$(HOME)/development/ndk/standalone-toolchain/arm-api27
+	SATC=$(HOME)/android/android-ndk-r17c/satl23
 	CXX=arm-linux-androideabi-clang++
 	CXXFLAGS += -march=armv7
 	LDFLAGS += -march=armv7
 	BOOST_ARCH=armeabi-v7a
-else ifeq ($(TARGET),X86) # Usage: 'make android TARGET=X86'
-	THE_OS=Android
-	SATC=$(HOME)/development/ndk/standalone-toolchain/x86-api27
-	CXX=i686-linux-android-clang++
-	CXXFLAGS += -march=i686
-	LDFLAGS += -march=i686
-	BOOST_ARCH=x86
-else ifeq ($(TARGET),ARMV8) # Usage: 'make android TARGET=ARMV8'
-	THE_OS=Android
-	SATC=$(HOME)/development/ndk/standalone-toolchain/arm64-api27
-	CXX=aarch64-linux-android-clang++
-	CXXFLAGS += -march=armv8
-	LDFLAGS += -march=armv8
-	BOOST_ARCH=arm64-v8a
 else
 	THE_OS := $(shell uname -s)
 endif
@@ -58,20 +44,23 @@ LIBS =
 
 ifeq ($(THE_OS),Android)
 	# Extra flags
-	CXXFLAGS += -std=c++14 -fPIE -D__ANDROID_API__=21 -Wno-macro-redefined -DUSE_CPU_ONLY
-	LDFLAGS += -fPIE -pie -D__ANDROID_API__=21
+	CXXFLAGS += -std=c++14 -fPIE -D__ANDROID_API__=23 -Wno-macro-redefined -DUSE_CPU_ONLY
+	LDFLAGS += -fPIE -pie -D__ANDROID_API__=23
 	# search local path for shared libraries?
 	#LDFLAGS += -Wl,-rpath,.
+
+    # Eigen
+    CXXFLAGS += -I./Eigen
 
 	# Static?
 	#CXXFLAGS += -static
 	LDFLAGS += -static-libstdc++
 
 	# Boost for android
-	CXXFLAGS += -I$(SATC)/extra/boost/1.67.0/include
-	LDFLAGS += -L$(SATC)/extra/boost/1.67.0/libs/llvm/$(BOOST_ARCH)
-	LIBS += $(SATC)/extra/boost/1.67.0/libs/llvm/$(BOOST_ARCH)/libboost_program_options.a
-	#DYNAMIC_LIBS += -lboost_program_options -lboost_filesystem -lboost_system
+	CXXFLAGS += -I$(SATC)/extra/boost/1.68.0/include
+	LDFLAGS += -L$(SATC)/extra/boost/1.68.0/libs/llvm/$(BOOST_ARCH)
+	#LIBS += $(SATC)/extra/boost/1.68.0/libs/llvm/$(BOOST_ARCH)/libboost_program_options.a
+	DYNAMIC_LIBS += -lboost_program_options -lboost_filesystem -lboost_system
 
 	# OpenBlass for android
 	CXXFLAGS += -I$(SATC)/extra/openblas/include
