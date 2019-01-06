@@ -83,7 +83,7 @@ ifeq ($(THE_OS),Android)
 	#LIBS += $(SATC)/sysroot/usr/lib/libz.a
 	DYNAMIC_LIBS += -lz
 else 
-	DYNAMIC_LIBS = -lboost_program_options -lpthread -lz
+	DYNAMIC_LIBS = -lboost_filesystem -lboost_system -lboost_program_options -lpthread -lz
 endif
 
 ifeq ($(THE_OS),Linux)
